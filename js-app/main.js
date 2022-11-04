@@ -1,4 +1,6 @@
-const url = "https://localhost:44359/api/beanvariety/";
+const beanVarietyUrl = "https://localhost:44359/api/beanvariety/";
+const coffeeUrl = "https://localhost:44359/api/coffee/";
+
 
 const button = document.querySelector("#run-button");
 button.addEventListener("click", () => {
@@ -9,6 +11,11 @@ button.addEventListener("click", () => {
 });
 
 function getAllBeanVarieties() {
-    return fetch(url)
-        .then(resp => resp.json());
+    return fetch(beanVarietyUrl)
+        .then(res => res.json());
+}
+
+function getAllCoffees() {
+    return fetch(coffeeUrl)
+        .then(res => res.json());
 }
