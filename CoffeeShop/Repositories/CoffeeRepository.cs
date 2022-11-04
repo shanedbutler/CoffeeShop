@@ -26,7 +26,12 @@ namespace CoffeeShop.Repositories
                 conn.Open();
                 using (var cmd = conn.CreateCommand())
                 {
-                    cmd.CommandText = "SELECT Id, [Title], BeanVarietyId FROM Coffee;";
+                    cmd.CommandText = @"
+                                        SELECT 
+                                            c.Id, c.Title, c.BeanVarietyId,
+                                            b.[Name], b.Region, b.Notes
+                                        FROM Coffee c
+                                            LEFT JOIN BeanVariety b ON c.BeanVarietyId = b.Id";
                     var reader = cmd.ExecuteReader();
                     var coffees = new List<Coffee>();
                     while (reader.Read())
@@ -36,8 +41,17 @@ namespace CoffeeShop.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             BeanVarietyId = reader.GetInt32(reader.GetOrdinal("BeanVarietyId")),
+                            BeanVariety = new BeanVariety()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("BeanVarietyId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Region = reader.GetString(reader.GetOrdinal("Region")),
+                            },
                         };
-
+                        if (!reader.IsDBNull(reader.GetOrdinal("Notes")))
+                        {
+                            coffee.BeanVariety.Notes = reader.GetString(reader.GetOrdinal("Notes"));
+                        }
                         coffees.Add(coffee);
                     }
 
@@ -56,9 +70,12 @@ namespace CoffeeShop.Repositories
                 using (var cmd = conn.CreateCommand())
                 {
                     cmd.CommandText = @"
-                        SELECT Id, [Title], BeanVarietyId 
-                          FROM Coffee
-                         WHERE Id = @id;";
+                                        SELECT 
+                                            c.Id, c.Title, c.BeanVarietyId,
+                                            b.[Name], b.Region, b.Notes
+                                        FROM Coffee c
+                                            LEFT JOIN BeanVariety b ON c.BeanVarietyId = b.Id
+                                        WHERE c.Id = @id;";
                     cmd.Parameters.AddWithValue("@id", id);
 
                     var reader = cmd.ExecuteReader();
@@ -71,6 +88,12 @@ namespace CoffeeShop.Repositories
                             Id = reader.GetInt32(reader.GetOrdinal("Id")),
                             Title = reader.GetString(reader.GetOrdinal("Title")),
                             BeanVarietyId = reader.GetInt32(reader.GetOrdinal("BeanVarietyId")),
+                            BeanVariety = new BeanVariety()
+                            {
+                                Id = reader.GetInt32(reader.GetOrdinal("BeanVarietyId")),
+                                Name = reader.GetString(reader.GetOrdinal("Name")),
+                                Region = reader.GetString(reader.GetOrdinal("Region")),
+                            },
                         };
                     }
 
