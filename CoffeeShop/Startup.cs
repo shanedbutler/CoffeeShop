@@ -28,7 +28,6 @@ namespace CoffeeShop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddTransient<IBeanVarietyRepository, BeanVarietyRepository>();
-            services.AddTransient<ICoffeeRepository, CoffeeRepository>();
             services.AddControllers();
             services.AddSwaggerGen(c =>
             {
