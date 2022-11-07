@@ -1,5 +1,5 @@
-const beanVarietyUrl = "https://localhost:44359/api/beanvariety/";
-const coffeeUrl = "https://localhost:44359/api/coffee/";
+const beanVarietyUrl = "https://localhost:5001/api/beanvariety/";
+const coffeeUrl = "https://localhost:5001/api/coffee/";
 
 
 const button = document.querySelector("#varieties-button");
